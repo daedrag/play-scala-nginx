@@ -7,7 +7,7 @@ target
 /.settings
 /RUNNING_PID
 
-
+.g8
 
 # Created by https://www.gitignore.io/api/eclipse
 
@@ -66,6 +66,7 @@ local.properties
 
 # Scala IDE specific (Scala & Java development for Eclipse)
 .cache-main
+.cache-tests
 .scala_dependencies
 .worksheet
 
