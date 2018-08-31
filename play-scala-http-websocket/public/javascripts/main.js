@@ -39,7 +39,7 @@
 			ws.close();	
 		}
 		
-		var wsUrl = 'ws://localhost:9000/ws/orders/table/' + tableId;
+		var wsUrl = 'wss://localhost:9005/ws/orders/table/' + tableId;
 		ws = new WebSocket(wsUrl);
 		ws.onmessage = (event) => {
 			console.log('Data:', event);
@@ -73,7 +73,7 @@
 		var item = itemInput.value;
 		if (!item) return;
 		
-		var url = 'http://localhost:9000/orders/table/' + currentTable + '/item/' + item;
+		var url = 'https://localhost:9005/orders/table/' + currentTable + '/item/' + item;
 		var xmlHttp = new XMLHttpRequest();
 	    xmlHttp.open("GET", url, false); // false for synchronous request
 	    xmlHttp.send(null);

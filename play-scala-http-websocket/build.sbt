@@ -15,3 +15,6 @@ libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2
 
 // Adds additional packages into conf/routes
 // play.sbt.routes.RoutesKeys.routesImport += "com.example.binders._"
+
+PlayKeys.devSettings += "play.server.http.port" -> "disabled"
+PlayKeys.devSettings += "play.server.https.port" -> "9005"
