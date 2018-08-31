@@ -1,6 +1,6 @@
 (function() {
 	
-	var currentTable  = undefined;
+	var currentTable = undefined;
 	var ws = undefined;
 	
 	var tableInput = document.getElementById('tableInput');
@@ -29,10 +29,11 @@
 	}
 	
 	function connect(tableId) {
-		if (!tableId || (currentTable === tableId)) {
+		if (!tableId) {
 			return;
 		}
 		
+		closingTable = currentTable;
 		currentTable = tableId;
 		if (ws) {
 			ws.close();	
@@ -52,7 +53,9 @@
 		
 		ws.onclose = (event) => {
 			console.warn('Socket closed:', event);
-			setStatus('Socket closed at table ' + tableId);
+			if (currentTable === tableId) {
+				setStatus('Socket closed at table ' + tableId);	
+			}
 		};
 
 		console.log('WS created', ws);
