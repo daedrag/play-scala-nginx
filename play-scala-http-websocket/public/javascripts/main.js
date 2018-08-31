@@ -4,10 +4,11 @@
 	var ws = undefined;
 	
 	var tableInput = document.getElementById('tableInput');
-	var watchTableBtn = document.getElementById('watchTableButton')
+	var watchTableBtn = document.getElementById('watchTableButton');
 	
 	var itemInput = document.getElementById('itemInput');
-	var addItemBtn = document.getElementById('addItemButton')
+	var addItemBtn = document.getElementById('addItemButton');
+	var clearAllItemsBtn = document.getElementById('clearAllItemsButton');
 	
 	var statusElem = document.getElementById('status');
 	var itemContainer = document.getElementById('items');
@@ -21,6 +22,10 @@
 		var t = document.createTextNode(item);
 		elem.appendChild(t);
 		itemContainer.appendChild(elem);
+	}
+	
+	function clearAllItems(e) {
+		itemContainer.innerHTML = '';
 	}
 	
 	function connect(tableId) {
@@ -42,15 +47,16 @@
 		
 		ws.onerror = (event) => {
 			console.error('Error:', event);
-			setStatus('Error at ' + tableId);
+			setStatus('Error at table ' + tableId);
 		};
 		
 		ws.onclose = (event) => {
-			console.warn('Socket closed:', event)
+			console.warn('Socket closed:', event);
+			setStatus('Socket closed at table ' + tableId);
 		};
 
 		console.log('WS created', ws);
-		setStatus('Connected to ' + tableId);
+		setStatus('Connected to table ' + tableId);
 	}
 	
 	function watchTable(e) {
@@ -72,4 +78,5 @@
 
 	watchTableBtn.onclick = watchTable;
 	addItemBtn.onclick = sendItem;
+	clearAllItemsBtn.onclick = clearAllItems;
 })();
