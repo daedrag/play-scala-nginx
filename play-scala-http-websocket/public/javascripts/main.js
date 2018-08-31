@@ -3,12 +3,24 @@
 	var currentTable  = undefined;
 	var ws = undefined;
 	
-	var tableInputElem = document.getElementById('tableInput');
+	var tableInput = document.getElementById('tableInput');
 	var watchTableBtn = document.getElementById('watchTableButton')
+	
+	var itemInput = document.getElementById('itemInput');
+	var addItemBtn = document.getElementById('addItemButton')
+	
 	var statusElem = document.getElementById('status');
+	var itemContainer = document.getElementById('items');
 	
 	function setStatus(status) {
 		statusElem.innerHTML = status;
+	}
+	
+	function addNewItem(item) {
+		var elem = document.createElement('div');
+		var t = document.createTextNode(item);
+		elem.appendChild(t);
+		itemContainer.appendChild(elem);
 	}
 	
 	function connect(tableId) {
@@ -16,20 +28,25 @@
 			return;
 		}
 		
+		currentTable = tableId;
 		if (ws) {
 			ws.close();	
 		}
-		currentTable = tableId;
 		
-		var wsUrl = 'ws://localhost:9000/ws/orders/table/' + tableId
+		var wsUrl = 'ws://localhost:9000/ws/orders/table/' + tableId;
 		ws = new WebSocket(wsUrl);
 		ws.onmessage = (event) => {
 			console.log('Data:', event);
+			addNewItem(event.data);
 		};
 		
 		ws.onerror = (event) => {
 			console.error('Error:', event);
 			setStatus('Error at ' + tableId);
+		};
+		
+		ws.onclose = (event) => {
+			console.warn('Socket closed:', event)
 		};
 
 		console.log('WS created', ws);
@@ -37,11 +54,22 @@
 	}
 	
 	function watchTable(e) {
-		var tableId = tableInputElem.value;
+		var tableId = tableInput.value;
 		if (!tableId) return;
 
 		connect(tableId);
 	}
+	
+	function sendItem(e) {
+		var item = itemInput.value;
+		if (!item) return;
+		
+		var url = 'http://localhost:9000/orders/table/' + currentTable + '/item/' + item;
+		var xmlHttp = new XMLHttpRequest();
+	    xmlHttp.open("GET", url, false); // false for synchronous request
+	    xmlHttp.send(null);
+	}
 
 	watchTableBtn.onclick = watchTable;
+	addItemBtn.onclick = sendItem;
 })();
